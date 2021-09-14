@@ -25,24 +25,23 @@ const VerifyOptions = {
 }
 
 async function Main(){
-    try{
-        // encrypt payload
-        const EncryptedJwt = jwt.sign(Payload, Secret, SignOptions);
-        console.log(EncryptedJwt)
+    // encrypt payload
+    const EncryptedJwt = jwt.sign(Payload, Secret, SignOptions);
+    console.log(EncryptedJwt)
 
-        // decrypt payload
-        const DecryptedJwt = await JwtVerify(EncryptedJwt, Secret, VerifyOptions);
-        console.log(DecryptedJwt)
-        
-        // wait for jwt expired
-        await Wait(3000)
-        
-        // decrypt expect error
-        const DecryptedAgainJwt = await JwtVerify(EncryptedJwt, Secret, VerifyOptions)
-        console.log(DecryptedAgainJwt)
-    }catch(e){
-        console.log(e)
-    }
+    // decrypt payload
+    const DecryptedJwt = await JwtVerify(EncryptedJwt, Secret, VerifyOptions);
+    console.log(DecryptedJwt)
+    
+    // wait for jwt expired
+    await Wait(3000)
+    
+    // decrypt expect error
+    const DecryptedAgainJwt = await JwtVerify(EncryptedJwt, Secret, VerifyOptions).catch((e) => {
+        console.log("ERROR:", e.name)
+        return e
+    })
+    console.log(DecryptedAgainJwt)
 }
 
 Main()
